@@ -1,0 +1,393 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+:root {
+    /* Zepto Theme: Bright Pink & Deep Purple */
+    --primary-color: #ff3269;
+    /* Hot Pink */
+    --secondary-color: #36005c;
+    /* Deep Purple */
+    --bg-color: #f7f5fa;
+    /* Very light purple/gray */
+    --card-bg: #ffffff;
+    --text-color: #1a1a1a;
+    --border-color: #e0e0e0;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    padding-bottom: 80px;
+    /* Space for fixed cart */
+}
+
+/* Nav Bar */
+header {
+    background: var(--secondary-color);
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(54, 0, 92, 0.2);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: white;
+    /* Zepto White Text on Purple */
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.sub-header {
+    color: #ffd1dc;
+    /* Light pinkish text */
+    font-size: 0.8rem;
+    margin-top: -5px;
+    font-weight: 600;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+nav a:hover,
+nav a.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+/* --- STICKY CATEGORY NAV --- */
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    /* Changed to 0 if header is static, or offset if header is fixed. Header is sticky top:0, height approx 75px */
+    top: 73px;
+    background: white;
+    z-index: 98;
+    /* Below header z-100 */
+    padding: 10px 15px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    scrollbar-width: none;
+}
+
+.sticky-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-pill {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.nav-pill:hover {
+    background: #e0e7ff;
+    color: var(--primary-color);
+}
+
+.nav-pill.active {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 6px rgba(54, 0, 92, 0.2);
+}
+
+.container {
+    max-width: 800px;
+    /* Narrower for app-like feel */
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* Categories */
+.category-header {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin: 30px 0 15px 0;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 10px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+}
+
+/* Menu Card (Zepto style: Vertical, Dense) */
+.menu-item-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.card-img-container {
+    height: 140px;
+    background: #eee;
+}
+
+.card-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.menu-content {
+    padding: 12px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.2;
+}
+
+.price {
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.add-btn {
+    background: white;
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    padding: 6px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: absolute;
+    bottom: 12px;
+    right: 10px;
+}
+
+.add-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Fixed Bottom Cart Bar */
+#bottom-cart-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--secondary-color);
+    /* Zepto Deep Purple footer */
+    color: white;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#bottom-cart-bar.visible {
+    transform: translateY(0);
+}
+
+.cart-info {
+    display: flex;
+    flex-direction: column;
+}
+
+#cart-count {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+#cart-total {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+#view-cart-btn {
+    background: white;
+    /* Contrast button */
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Modal Styling Improvements */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(54, 0, 92, 0.5);
+    /* Tinted backdrop */
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: flex-end;
+    /* Sheet style on mobile */
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    /* Desktop limit */
+    border-radius: 20px 20px 0 0;
+    padding: 25px;
+    max-height: 80vh;
+    animation: slideUp 0.3s ease-out;
+    position: relative;
+    box-sizing: border-box;
+}
+
+@media(min-width: 600px) {
+    .modal {
+        align-items: center;
+    }
+
+    .modal-content {
+        border-radius: 20px;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.cart-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dotted #eee;
+}
+
+.tax-row {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.total-line {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    font-weight: 800;
+    margin-top: 15px;
+    text-align: right;
+}
+
+#confirm-payment-btn {
+    background: linear-gradient(90deg, #ff3269, #ff5e8a);
+    color: white;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 12px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* Valid for booking pages too */
+#booking-section {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+button[type="submit"] {
+    background: var(--secondary-color);
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self Diner Style</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>✨ Diner</h1>
+            <p class="sub-header">Superfast Delivery</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Menu</a></li>
+                <li><a href="booking.html">Book Table</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sticky Category Navigation -->
+    <nav id="category-nav" class="sticky-nav">
+        <!-- Categories injected by JS -->
+    </nav>
+
+    <main class="container">
+        <!-- Menu Section -->
+        <section id="menu-section">
+            <div id="menu-items">
+                <!-- Menu items injected by JS -->
+                <p>Loading tasty dishes...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Fixed Bottom Cart Bar -->
+    <div id="bottom-cart-bar">
+        <div class="cart-info">
+            <span id="cart-count">0 ITEMS</span>
+            <span id="cart-total">₹0</span>
+        </div>
+        <button id="view-cart-btn">View Cart &rarr;</button>
+    </div>
+
+    <!-- Payment/Cart Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal"
+                style="position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+
+            <div id="payment-step-1">
+                <h2>Your Order</h2>
+                <div id="modal-items-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;">
+                    <!-- Items injected here -->
+                </div>
+
+                <div class="total-line">
+                    Total: <span id="modal-grand-total">₹0.00</span>
+                </div>
+
+                <h3 style="margin-top: 20px;">Payment Method</h3>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="UPI">
+                        <span>📱</span> UPI / GPay
+                    </div>
+                    <div class="payment-option" data-method="Card">
+                        <span>💳</span> Card
+                    </div>
+                    <div class="payment-option" data-method="Cash">
+                        <span>💵</span> Cash
+                    </div>
+                </div>
+
+                <button id="confirm-payment-btn" disabled>Pay Now</button>
+            </div>
+
+            <div id="payment-step-2" class="hidden">
+                <div class="processing-animation" style="text-align: center; padding: 40px;">
+                    <p style="font-size: 1.2rem; font-weight: bold;">Processing...</p>
+                </div>
+            </div>
+
+            <div id="payment-step-3" class="hidden">
+                <div style="text-align: center;">
+                    <span class="success-icon">✔</span>
+                    <h2>Order Placed!</h2>
+                    <p>Kitchen has started preparing your food.</p>
+                    <button id="close-success-btn"
+                        style="background:var(--secondary-color); color:white; padding:10px 20px; border:none; border-radius:8px; margin-top:15px; cursor:pointer;">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
