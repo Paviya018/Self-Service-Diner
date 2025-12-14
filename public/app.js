@@ -107,6 +107,10 @@ const timeSelect = document.getElementById('time');
  * Renders the menu categorized like Swiggy.
  * Also generates the Category Navigation bar.
  */
+/**
+ * Renders the menu categorized like Swiggy.
+ * Also generates the Category Navigation bar.
+ */
 function renderMenu() {
     if (!menuItemsEl) return;
 
@@ -167,6 +171,22 @@ function renderMenu() {
         items.forEach(item => {
             const card = document.createElement('div');
             card.className = 'menu-item-card glass-panel';
+            const qty = getItemQuantity(item.id);
+
+            // Logic to switch between ADD button and Qty Control
+            let buttonHTML = '';
+            if (qty > 0) {
+                buttonHTML = `
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <span class="qty-count">${qty}</span>
+                        <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    </div>
+                `;
+            } else {
+                buttonHTML = `<button class="add-btn" onclick="updateQuantity(${item.id}, 1)">ADD</button>`;
+            }
+
             card.innerHTML = `
                 <div class="card-img-container">
                     <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/150'">
@@ -174,7 +194,7 @@ function renderMenu() {
                 <div class="menu-content">
                     <h3>${item.name}</h3>
                     <p class="price">₹${item.price}</p>
-                    <button class="add-btn" onclick="addToCart(${item.id})">ADD</button>
+                    ${buttonHTML}
                 </div>
             `;
             grid.appendChild(card);
@@ -184,16 +204,30 @@ function renderMenu() {
     }
 }
 
-window.addToCart = function (itemId) {
-    const selectedItem = menu.find(item => item.id === itemId);
-    const existingItem = currentOrder.find(item => item.id === itemId);
+// Helper to get current qty
+function getItemQuantity(id) {
+    const item = currentOrder.find(i => i.id === id);
+    return item ? item.quantity : 0;
+}
 
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
+// Unified Update Function (Add/Remove)
+window.updateQuantity = function (itemId, change) {
+    const existingItemIndex = currentOrder.findIndex(item => item.id === itemId);
+
+    if (existingItemIndex > -1) {
+        // Item exists
+        currentOrder[existingItemIndex].quantity += change;
+        if (currentOrder[existingItemIndex].quantity <= 0) {
+            // Remove if 0
+            currentOrder.splice(existingItemIndex, 1);
+        }
+    } else if (change > 0) {
+        // Add new item
+        const selectedItem = menu.find(item => item.id === itemId);
         currentOrder.push({ ...selectedItem, quantity: 1 });
     }
 
+    renderMenu(); // Re-render to update buttons
     updateCartUI();
 };
 
@@ -218,15 +252,27 @@ function updateCartUI() {
         }
     }
 
-    // 3. Update Modal List (if open or preparing to open)
+    // 3. Update Modal List (with controls)
     if (modalItemsList) {
         modalItemsList.innerHTML = '';
         currentOrder.forEach(item => {
             const row = document.createElement('div');
             row.className = 'cart-row';
+            row.style.alignItems = "center";
+
             row.innerHTML = `
-                <span>${item.name} x${item.quantity}</span>
-                <span>₹${item.price * item.quantity}</span>
+                <div style="flex-grow: 1;">
+                    <div style="font-weight:600;">${item.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">₹${item.price} each</div>
+                </div>
+                
+                <div style="display:flex; align-items:center; gap:8px; margin-right:15px;">
+                     <button onclick="updateQuantity(${item.id}, -1)" style="padding:2px 8px; border:1px solid #ddd; background:#fff; cursor:pointer; border-radius:4px;">-</button>
+                     <span style="font-weight:bold;">${item.id === 999 ? '1' : item.quantity}</span>
+                     <button onclick="updateQuantity(${item.id}, 1)" style="padding:2px 8px; border:1px solid #ddd; background:#fff; cursor:pointer; border-radius:4px;">+</button>
+                </div>
+
+                <div style="font-weight:bold;">₹${item.price * item.quantity}</div>
             `;
             modalItemsList.appendChild(row);
         });
@@ -397,6 +443,78 @@ if (bookingForm) {
         }
     });
 }
+
+// Init
+// --- CHATBOT LOGIC ---
+const chatToggleBtn = document.getElementById('chat-toggle-btn');
+const chatBox = document.getElementById('chat-box');
+const closeChatBtn = document.getElementById('close-chat');
+const sendChatBtn = document.getElementById('send-chat-btn');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+
+if (chatToggleBtn && chatBox) {
+    chatToggleBtn.addEventListener('click', () => {
+        chatBox.classList.toggle('open');
+    });
+}
+
+if (closeChatBtn) {
+    closeChatBtn.addEventListener('click', () => {
+        chatBox.classList.remove('open');
+    });
+}
+
+const botReplies = {
+    "hello": "Hi there! Welcome to Diner. Hungry?",
+    "hi": "Hello! Ready to order something delicious?",
+    "food": "We have amazing Biryanis and Pizzas! Check out the menu.",
+    "menu": "You can browse our menu on the main page. It's properly categorized!",
+    "payment": "We accept UPI, Cards, and Cash.",
+    "delivery": "We deliver super fast! Usually in 30 minutes.",
+    "price": "Our prices are very affordable. Check the menu!",
+    "thank": "You're welcome! Enjoy your meal.",
+    "default": "I'm just a simple bot. Please check the menu to order food!"
+};
+
+function addMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${isUser ? 'user-msg' : 'bot-msg'}`;
+    msgDiv.textContent = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function handleChat() {
+    const text = chatInput.value.trim().toLowerCase();
+    if (!text) return;
+
+    addMessage(chatInput.value, true);
+    chatInput.value = '';
+
+    // Simple keyword matching
+    setTimeout(() => {
+        let reply = botReplies["default"];
+        for (const key in botReplies) {
+            if (text.includes(key)) {
+                reply = botReplies[key];
+                break;
+            }
+        }
+        addMessage(reply, false);
+    }, 600);
+}
+
+if (sendChatBtn) {
+    sendChatBtn.addEventListener('click', handleChat);
+}
+
+if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleChat();
+    });
+}
+
 
 // Init
 renderMenu();
